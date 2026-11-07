@@ -1,0 +1,66 @@
+<?php
+$judul = "Tambah Kategori";
+$menu  = "kategori";
+require_once '../config/koneksi.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama = trim($_POST['nm_kategori']);
+    $ket  = trim($_POST['keterangan']);
+
+    if ($nama === '') {
+        $error = "Nama kategori wajib diisi.";
+    } else {
+        try {
+            $stmt = mysqli_prepare($koneksi, "INSERT INTO kategori (nm_kategori, keterangan) VALUES (?, ?)");
+            mysqli_stmt_bind_param($stmt, "ss", $nama, $ket);
+            mysqli_stmt_execute($stmt);
+
+            $_SESSION['pesan'] = "Kategori berhasil ditambahkan.";
+            header("Location: index.php");
+            exit;
+        } catch (mysqli_sql_exception $ex) {
+            $error = "Gagal menyimpan. Mungkin nama kategori sudah ada.";
+        }
+    }
+}
+
+include '../partials/header.php';
+?>
+
+<div class="app-content-header">
+  <div class="container-fluid">
+    <h3 class="mb-0">Tambah Kategori</h3>
+  </div>
+</div>
+
+<div class="app-content">
+  <div class="container-fluid">
+
+    <?php if (isset($error)): ?>
+      <div class="alert alert-danger"><?= e($error) ?></div>
+    <?php endif; ?>
+
+    <div class="card">
+      <form method="post">
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Nama Kategori</label>
+            <input type="text" name="nm_kategori" class="form-control"
+                   value="<?= e($_POST['nm_kategori'] ?? '') ?>" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Keterangan</label>
+            <textarea name="keterangan" class="form-control" rows="3"><?= e($_POST['keterangan'] ?? '') ?></textarea>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary">Simpan</button>
+          <a href="index.php" class="btn btn-secondary">Batal</a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<?php include '../partials/footer.php'; ?>
