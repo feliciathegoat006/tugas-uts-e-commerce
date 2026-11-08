@@ -25,7 +25,7 @@ Dibuat dengan PHP native, MySQL, dan AdminLTE 4.
 
 ## Akun Demo
 - Username: `admin`
-- Password: `admin321`
+- Password: `admin123`
 
 ## Teknologi
 PHP, MySQL, HTML, CSS, JavaScript, AdminLTE 4 (Bootstrap 5), DataTables
